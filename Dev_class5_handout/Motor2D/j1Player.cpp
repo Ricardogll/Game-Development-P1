@@ -29,6 +29,71 @@ j1Player::j1Player() : j1Module()
 	idle_right.PushBack({ 231,39,20,35 });
 	idle_right.speed = 0.01f;
 	
+	idle_left.PushBack({ 1,157,20,35 });	//mirar si estan bien cojidos los pixeles (1 mas o 1menos?)
+	idle_left.PushBack({ 21,157,20,35 });
+	idle_left.PushBack({ 42,157,20,35 });
+	idle_left.PushBack({ 63,157,20,35 });
+	idle_left.PushBack({ 84,157,20,35 });
+	idle_left.PushBack({ 105,157,20,35 });
+	idle_left.PushBack({ 126,157,20,35 });
+	idle_left.PushBack({ 147,157,20,35 });
+	idle_left.PushBack({ 168,157,20,35 });
+	idle_left.PushBack({ 189,157,20,35 });
+	idle_left.PushBack({ 210,157,20,35 });
+	idle_left.PushBack({ 231,157,20,35 });
+	idle_left.speed = 0.01f;
+
+	walk_right.PushBack({ 1,1,22,33 });
+	walk_right.PushBack({ 23,1,19,33 });
+	walk_right.PushBack({ 43,1,16,33 });
+	walk_right.PushBack({ 60,1,20,33 });
+	walk_right.PushBack({ 80,1,20,33 });
+	walk_right.PushBack({ 100,1,19,33 });
+	walk_right.PushBack({ 119,1,20,33 });
+	walk_right.PushBack({ 139,1,23,33 });
+	walk_right.speed = 0.01f;
+
+	walk_left.PushBack({ 1,118,22,33 });
+	walk_left.PushBack({ 23,118,19,33 });
+	walk_left.PushBack({ 43,118,16,33 });
+	walk_left.PushBack({ 60,118,20,33 });
+	walk_left.PushBack({ 80,118,20,33 });
+	walk_left.PushBack({ 100,118,19,33 });
+	walk_left.PushBack({ 119,118,20,33 });
+	walk_left.PushBack({ 139,118,23,33 });
+	walk_left.speed = 0.01f;
+
+	jump_right.PushBack({ 162,1,19,37 });
+	jump_right.PushBack({ 203,1,19,37 });
+	jump_right.PushBack({ 223,1,21,37 });
+	jump_right.PushBack({ 182,1,21,37 });
+	jump_right.speed = 0.01f;
+	jump_right.loop = false;
+
+	jump_left.PushBack({ 162,118,19,37 });
+	jump_left.PushBack({ 203,118,19,37 });
+	jump_left.PushBack({ 223,118,21,37 });
+	jump_left.PushBack({ 182,118,21,37 });
+	jump_left.speed = 0.01f;
+	jump_left.loop = false;
+	
+	ledge_right.PushBack({ 1,76,21,41 });
+	ledge_right.PushBack({ 22,76,20,41 });
+	ledge_right.PushBack({ 42,76,19,41 });
+	ledge_right.PushBack({ 61,76,20,41 });
+	ledge_right.PushBack({ 81,76,20,41 });
+	ledge_right.PushBack({ 101,76,20,41 });
+	ledge_right.speed = 0.01f;
+	ledge_right.loop = false;
+
+	ledge_left.PushBack({ 1,194,21,41 });
+	ledge_left.PushBack({ 22,194,20,41 });
+	ledge_left.PushBack({ 42,194,19,41 });
+	ledge_left.PushBack({ 61,194,20,41 });
+	ledge_left.PushBack({ 81,194,20,41 });
+	ledge_left.PushBack({ 101,194,20,41 });
+	ledge_left.speed = 0.01f;
+	ledge_left.loop = false;	
 
 }
 
@@ -106,7 +171,7 @@ bool j1Player::PostUpdate()
 	{
 		//playerpos.x += SPEED_X;
 		state = WALK_RIGHT;
-		LOG("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		
 	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
@@ -116,11 +181,32 @@ bool j1Player::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		//playerpos.y += SPEED_Y;
+		
 		state = WALK_LEFT;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
 		state = IDLE_LEFT;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		state = JUMP_LEFT;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		state = JUMP_RIGHT;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		state = JUMP_RIGHT;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_V) == KEY_REPEAT)
+	{
+		state = LEDGE_RIGHT;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_REPEAT)
+	{
+		state = LEDGE_LEFT;
 	}
 	Draw();
 	return true;
@@ -172,7 +258,12 @@ void j1Player::Draw()
 	case JUMP_LEFT:
 		current_animation = &jump_left;
 		break;
-
+	case LEDGE_RIGHT:
+		current_animation = &ledge_right;
+		break;
+	case LEDGE_LEFT:
+		current_animation = &ledge_left;
+		break;
 
 	}
 	SDL_Rect render = current_animation->GetCurrentFrame();

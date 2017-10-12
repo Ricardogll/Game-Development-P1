@@ -25,6 +25,8 @@ enum STATE {
 	WALK_LEFT,
 	JUMP_RIGHT,
 	JUMP_LEFT,
+	LEDGE_RIGHT,
+	LEDGE_LEFT,
 	NO_STATE,
 };
 
@@ -59,7 +61,8 @@ private:
 	Animation idle_left;
 	Animation walk_left;
 	Animation jump_left;
-
+	Animation ledge_right;
+	Animation ledge_left;
 
 public:
 
