@@ -27,8 +27,8 @@ j1Player::j1Player() : j1Module()
 	idle_right.PushBack({ 189,39,20,35 });
 	idle_right.PushBack({ 210,39,20,35 });
 	idle_right.PushBack({ 231,39,20,35 });
-
-	LOG("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+	idle_right.speed = 0.01f;
+	
 
 }
 
@@ -45,11 +45,7 @@ bool j1Player::Awake(pugi::xml_node& config)
 	LOG("Loading Player");
 	bool ret = true;
 
-	playerpos.x = 100;
-	playerpos.y = 100;
-	speed.x = 0;
-	//speed.y = GRAVITY;
-	speed.y = 0;
+
 
 	return ret;
 }
@@ -61,33 +57,38 @@ bool j1Player::Start()
 	graphics = App->tex->Load("maps/PlayerSprites.png");
 	state = IDLE_RIGHT;
 	
+	playerpos.x = 100;
+	playerpos.y = 100;
+	speed.x = 0;
+	//speed.y = GRAVITY;
+	speed.y = 0;
 
 	return ret;
 }
 
 bool j1Player::Update()
 {
-
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	{
-		playerpos.x += SPEED_X;
-		state = WALK_RIGHT;
-		LOG("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-	}
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
-	{
-		state = IDLE_RIGHT;
-	}
-	
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	{
-		playerpos.y += SPEED_Y;
-		state = WALK_LEFT;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
-	{
-		state = IDLE_LEFT;
-	}
+	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	//{
+	//	//playerpos.x += SPEED_X;
+	//	state = WALK_RIGHT;
+	//	LOG("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+	//}
+	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	//{
+	//	state = IDLE_RIGHT;
+	//}
+	//
+	//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	//{
+	//	//playerpos.y += SPEED_Y;
+	//	state = WALK_LEFT;
+	//}
+	//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	//{
+	//	state = IDLE_LEFT;
+	//}
 	return true;
 }
 
@@ -99,6 +100,29 @@ bool j1Player::PostUpdate()
 	//	position.y += 1.0f;
 	//}
 	//Draw();
+	//LOG("AAAAAAASDASDSDASDASDSDSDSDSDADASDASDADSSD");
+	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		//playerpos.x += SPEED_X;
+		state = WALK_RIGHT;
+		LOG("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	{
+		state = IDLE_RIGHT;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		//playerpos.y += SPEED_Y;
+		state = WALK_LEFT;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	{
+		state = IDLE_LEFT;
+	}
+	Draw();
 	return true;
 }
 
@@ -114,9 +138,9 @@ bool j1Player::CleanUp()
 bool j1Player::Load(pugi::xml_node& node)
 {
 	bool ret = true;
-	pugi::xml_node player = node.append_child("position"); //mirar bien que hace esto
-	player.append_attribute("x") = playerpos.x;
-	player.append_attribute("y") = playerpos.y;
+	//pugi::xml_node player = node.append_child("position"); //mirar bien que hace esto
+	//player.append_attribute("x") = playerpos.x;
+	//player.append_attribute("y") = playerpos.y;
 
 	return ret;
 }
@@ -153,5 +177,5 @@ void j1Player::Draw()
 	}
 	SDL_Rect render = current_animation->GetCurrentFrame();
 	App->render->Blit(graphics, playerpos.x, playerpos.y, &render);
-	LOG("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+	//LOG("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 }

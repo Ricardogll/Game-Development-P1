@@ -11,6 +11,7 @@ j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
 	name.create("audio");
+	
 }
 
 // Destructor

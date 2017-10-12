@@ -43,7 +43,6 @@ public:
 	bool Update();
 	bool PostUpdate();
 	bool Load(pugi::xml_node&);
-	void Input();
 	void Draw();
 
 private:
