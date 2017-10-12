@@ -1,0 +1,5 @@
+﻿  j1Map.cpp
+c:\users\ricardo\desktop\devjuego\dev_class5_handout\motor2d\j1map.cpp(42): warning C4018: '<': signed/unsigned mismatch
+c:\users\ricardo\desktop\devjuego\dev_class5_handout\motor2d\j1map.cpp(43): warning C4018: '<': signed/unsigned mismatch
+  Motor2D.vcxproj -> C:\Users\Ricardo\Desktop\DEVJUEGO\Dev_class5_handout\Debug\Motor 2D.exe
+  Motor2D.vcxproj -> C:\Users\Ricardo\Desktop\DEVJUEGO\Dev_class5_handout\Debug\Motor 2D.pdb (Full PDB)
