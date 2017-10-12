@@ -15,8 +15,20 @@
 j1Player::j1Player() : j1Module()
 {
 
-	idle.PushBack({});
+	idle_right.PushBack({ 1,39,20,35 });	//mirar si estan bien cojidos los pixeles (1 mas o 1menos?)
+	idle_right.PushBack({ 21,39,20,35 });
+	idle_right.PushBack({ 42,39,20,35 });
+	idle_right.PushBack({ 63,39,20,35 });
+	idle_right.PushBack({ 84,39,20,35 });
+	idle_right.PushBack({ 105,39,20,35 });
+	idle_right.PushBack({ 126,39,20,35 });
+	idle_right.PushBack({ 147,39,20,35 });
+	idle_right.PushBack({ 168,39,20,35 });
+	idle_right.PushBack({ 189,39,20,35 });
+	idle_right.PushBack({ 210,39,20,35 });
+	idle_right.PushBack({ 231,39,20,35 });
 
+	LOG("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 }
 
@@ -33,10 +45,11 @@ bool j1Player::Awake(pugi::xml_node& config)
 	LOG("Loading Player");
 	bool ret = true;
 
-	playerpos.x = 10;
-	playerpos.y = 10;
+	playerpos.x = 100;
+	playerpos.y = 100;
 	speed.x = 0;
-	speed.y = GRAVITY;
+	//speed.y = GRAVITY;
+	speed.y = 0;
 
 	return ret;
 }
@@ -45,7 +58,7 @@ bool j1Player::Start()
 {
 	LOG("starting player");
 	bool ret = true;
-	graphics = App->tex->Load("maps/Mario.png");
+	graphics = App->tex->Load("maps/PlayerSprites.png");
 	state = IDLE_RIGHT;
 	
 
@@ -59,6 +72,7 @@ bool j1Player::Update()
 	{
 		playerpos.x += SPEED_X;
 		state = WALK_RIGHT;
+		LOG("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
@@ -139,4 +153,5 @@ void j1Player::Draw()
 	}
 	SDL_Rect render = current_animation->GetCurrentFrame();
 	App->render->Blit(graphics, playerpos.x, playerpos.y, &render);
+	LOG("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 }
