@@ -15,6 +15,7 @@
 
 struct SDL_texture;
 struct SDL_Rect;
+struct Collider;
 
 //enum player state? idle, jumping...?
 //enum player moving? idle, right, up...?
@@ -56,7 +57,7 @@ public:
 	//bool LoadFile();
 	void Draw();
 	bool Jumping();
-
+	void OnCollision(Collider* c1, Collider* c2);
 private:
 
 	uint width = 0;
@@ -89,6 +90,8 @@ public:
 
 	fPoint playerpos;
 	//fPoint playervel;
+	Collider* playerCollider;
+	bool touching_floor = false;
 
 
 };

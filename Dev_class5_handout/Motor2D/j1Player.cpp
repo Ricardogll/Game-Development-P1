@@ -6,7 +6,8 @@
 #include "j1Render.h"
 #include "j1Input.h"
 #include "j1Map.h"
-#include "SDL\include\SDL_timer.h"
+//#include "SDL\include\SDL_timer.h"
+#include "j1Collision.h"
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
@@ -165,6 +166,7 @@ bool j1Player::Start()
 	speed.x = 0;
 	//speed.y = GRAVITY;
 	speed.y = 0;
+	playerCollider = App->collision->AddCollider({ (int)playerpos.x,(int)playerpos.y,20,35 }, COLLIDER_PLAYER, this);
 
 	return ret;
 }
@@ -281,11 +283,13 @@ bool j1Player::PostUpdate()
 	}
 
 
-	if (playerpos.y < 400) {
+	if (playerpos.y < 400 && touching_floor == false) {
 		speed.y += GRAVITY;
 		
 	}
-	else if (playerpos.y >= 400) {
+	else// if (playerpos.y >= 400) 
+	{
+		LOG("Vy = 0");
 		speed.y = 0;
 		onGround = true;
 		ledge_right.Reset();
@@ -295,7 +299,10 @@ bool j1Player::PostUpdate()
 		jumping = false;
 	}
 	playerpos.y += speed.y;
+	playerCollider->SetPos(playerpos.x, playerpos.y);
 	Draw();
+	if (touching_floor)
+		LOG("trueeee");
 	return true;
 }
 
@@ -318,6 +325,7 @@ bool j1Player::Jumping() {
 		speed.y = -2.0f;
 		onGround = false;
 		playerpos.y-=5;
+		touching_floor = false;
 	}
 
 	if (speed.y < -2.0f / 2) {
@@ -439,4 +447,45 @@ void j1Player::LoadPosition() {
 void j1Player::SavePosition() {
 	position_attr_x.set_value(playerpos.x);
 	position_attr_y.set_value(playerpos.y);
+}
+
+
+void j1Player::OnCollision(Collider* c1, Collider* c2) {
+
+	if (c2->type == COLLIDER_FLOOR)
+	{
+		//LOG("COLLISION PLAYER WITH FLOOR");
+		if (c1->rect.y < c2->rect.y + c2->rect.h && c1->rect.y + 3 > c2->rect.y + c2->rect.h)
+
+		{
+			playerpos.y = playerpos.y + 1;
+			/*if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+				playerpos.y = playerpos.y + 0.5f;*/
+			
+		}
+		else if (c1->rect.y + c1->rect.h > c2->rect.y && c1->rect.y + c1->rect.h - 3< c2->rect.y)
+
+		{
+			playerpos.y = playerpos.y - speed.y;
+			touching_floor = true;
+			
+			LOG("touching_floor = TRUE");
+		}
+
+
+		else if (c1->rect.x + c1->rect.w > c2->rect.x && c1->rect.x + c1->rect.w - 3 < c2->rect.x)
+		{
+			playerpos.x = playerpos.x - 1;
+
+		}
+		else if (c1->rect.x < c2->rect.x + c2->rect.w && c1->rect.x + 3 > c2->rect.x + c2->rect.w)
+		{
+			playerpos.x = playerpos.x + 1;
+
+		}
+	}
+	if (c2->type == COLLIDER_DIE) 
+	{
+
+	}
 }

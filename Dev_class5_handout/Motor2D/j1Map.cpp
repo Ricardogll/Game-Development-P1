@@ -6,6 +6,7 @@
 #include "j1Map.h"
 #include "j1Player.h"
 #include <math.h>
+#include "j1Collision.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -23,6 +24,10 @@ bool j1Map::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
+
+
+	Collider* mapcollider = App->collision->AddCollider({400,300,50,50},COLLIDER_FLOOR,this);
+	Collider* mapcollider2 = App->collision->AddCollider({ 200,400,50,50 }, COLLIDER_FLOOR, this);
 
 	return ret;
 }
