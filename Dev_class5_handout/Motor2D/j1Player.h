@@ -8,9 +8,9 @@
 #include	"j1Textures.h"
 #include	"Animation.h"
 
-#define GRAVITY 2.0f //change gravity after testing it
+#define GRAVITY 0.01f //change gravity after testing it
 #define SPEED_X 1.0f
-#define SPEED_Y 1.0f
+#define SPEED_Y 0.3f
 
 
 struct SDL_texture;
@@ -46,6 +46,7 @@ public:
 	bool PostUpdate();
 	bool Load(pugi::xml_node&);
 	void Draw();
+	bool Jumping();
 
 private:
 
@@ -64,9 +65,14 @@ private:
 	Animation ledge_right;
 	Animation ledge_left;
 
+	uint lastTime = 0;
+	bool jump_flag=false;
+	bool onGround = true;
+
 public:
 
 	fPoint playerpos;
+	//fPoint playervel;
 
 
 };

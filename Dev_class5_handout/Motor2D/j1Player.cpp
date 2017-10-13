@@ -6,6 +6,7 @@
 #include "j1Render.h"
 #include "j1Input.h"
 #include "j1Map.h"
+#include "SDL\include\SDL_timer.h"
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
@@ -15,7 +16,7 @@
 j1Player::j1Player() : j1Module()
 {
 
-	idle_right.PushBack({ 1,39,20,35 });	//mirar si estan bien cojidos los pixeles (1 mas o 1menos?)
+	idle_right.PushBack({ 1,39,20,35 });	
 	idle_right.PushBack({ 21,39,20,35 });
 	idle_right.PushBack({ 42,39,20,35 });
 	idle_right.PushBack({ 63,39,20,35 });
@@ -27,9 +28,9 @@ j1Player::j1Player() : j1Module()
 	idle_right.PushBack({ 189,39,20,35 });
 	idle_right.PushBack({ 210,39,20,35 });
 	idle_right.PushBack({ 231,39,20,35 });
-	idle_right.speed = 0.01f;
+	idle_right.speed = 0.05f;
 	
-	idle_left.PushBack({ 1,157,20,35 });	//mirar si estan bien cojidos los pixeles (1 mas o 1menos?)
+	idle_left.PushBack({ 1,157,20,35 });	
 	idle_left.PushBack({ 21,157,20,35 });
 	idle_left.PushBack({ 42,157,20,35 });
 	idle_left.PushBack({ 63,157,20,35 });
@@ -41,7 +42,7 @@ j1Player::j1Player() : j1Module()
 	idle_left.PushBack({ 189,157,20,35 });
 	idle_left.PushBack({ 210,157,20,35 });
 	idle_left.PushBack({ 231,157,20,35 });
-	idle_left.speed = 0.01f;
+	idle_left.speed = 0.05f;
 
 	walk_right.PushBack({ 1,1,22,33 });
 	walk_right.PushBack({ 23,1,19,33 });
@@ -51,7 +52,7 @@ j1Player::j1Player() : j1Module()
 	walk_right.PushBack({ 100,1,19,33 });
 	walk_right.PushBack({ 119,1,20,33 });
 	walk_right.PushBack({ 139,1,23,33 });
-	walk_right.speed = 0.01f;
+	walk_right.speed = 0.05f;
 
 	walk_left.PushBack({ 1,118,22,33 });
 	walk_left.PushBack({ 23,118,19,33 });
@@ -61,20 +62,20 @@ j1Player::j1Player() : j1Module()
 	walk_left.PushBack({ 100,118,19,33 });
 	walk_left.PushBack({ 119,118,20,33 });
 	walk_left.PushBack({ 139,118,23,33 });
-	walk_left.speed = 0.01f;
+	walk_left.speed = 0.05f;
 
 	jump_right.PushBack({ 162,1,19,37 });
 	jump_right.PushBack({ 203,1,19,37 });
 	jump_right.PushBack({ 223,1,21,37 });
 	jump_right.PushBack({ 182,1,21,37 });
-	jump_right.speed = 0.01f;
+	jump_right.speed = 0.05f;
 	jump_right.loop = false;
 
 	jump_left.PushBack({ 162,118,19,37 });
 	jump_left.PushBack({ 203,118,19,37 });
 	jump_left.PushBack({ 223,118,21,37 });
 	jump_left.PushBack({ 182,118,21,37 });
-	jump_left.speed = 0.01f;
+	jump_left.speed = 0.05f;
 	jump_left.loop = false;
 	
 	ledge_right.PushBack({ 1,76,21,41 });
@@ -83,7 +84,7 @@ j1Player::j1Player() : j1Module()
 	ledge_right.PushBack({ 61,76,20,41 });
 	ledge_right.PushBack({ 81,76,20,41 });
 	ledge_right.PushBack({ 101,76,20,41 });
-	ledge_right.speed = 0.01f;
+	ledge_right.speed = 0.05f;
 	ledge_right.loop = false;
 
 	ledge_left.PushBack({ 1,194,21,41 });
@@ -92,7 +93,7 @@ j1Player::j1Player() : j1Module()
 	ledge_left.PushBack({ 61,194,20,41 });
 	ledge_left.PushBack({ 81,194,20,41 });
 	ledge_left.PushBack({ 101,194,20,41 });
-	ledge_left.speed = 0.01f;
+	ledge_left.speed = 0.05f;
 	ledge_left.loop = false;	
 
 }
@@ -133,7 +134,8 @@ bool j1Player::Start()
 
 bool j1Player::Update()
 {
-	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
+	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"); //log doesnt appear. Update doesnt run. why?
 	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	//{
 	//	//playerpos.x += SPEED_X;
@@ -169,7 +171,7 @@ bool j1Player::PostUpdate()
 	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		//playerpos.x += SPEED_X;
+		playerpos.x += SPEED_X;
 		state = WALK_RIGHT;
 		
 	}
@@ -180,7 +182,7 @@ bool j1Player::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		//playerpos.y += SPEED_Y;
+		playerpos.x -= SPEED_X;
 		
 		state = WALK_LEFT;
 	}
@@ -191,14 +193,13 @@ bool j1Player::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		state = JUMP_LEFT;
+		
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		state = JUMP_RIGHT;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-	{
-		state = JUMP_RIGHT;
+		Jumping();
+
 	}
 	if (App->input->GetKey(SDL_SCANCODE_V) == KEY_REPEAT)
 	{
@@ -207,9 +208,39 @@ bool j1Player::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_REPEAT)
 	{
 		state = LEDGE_LEFT;
+		//LOG("%d", GetCurrentTime());
 	}
+
+	speed.y += GRAVITY;
+	playerpos.y += speed.y;
 	Draw();
 	return true;
+}
+
+bool j1Player::Jumping() {
+	bool ret = true;
+	//uint currentTime = SDL_GetTicks();
+
+	//if (currentTime > (lastTime + 1000)) {
+	//
+	//	lastTime = currentTime;
+	//	jump_flag = true;
+	//}
+
+	//if (jump_flag) {
+	//	playerpos.y += SPEED_Y;
+	//}
+	if (onGround)
+	{
+		speed.y = -2.0f;
+		onGround = false;
+	}
+
+	if (speed.y < -2.0f / 2) {
+		speed.y = -2.0f / 2;
+	}
+
+	return ret;
 }
 
 

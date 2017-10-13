@@ -1,6 +1,4 @@
-﻿  j1Scene.cpp
-  j1Player.cpp
-c:\users\ricardo\documents\github\game-development-p1\dev_class5_handout\motor2d\j1player.cpp(270): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
+﻿  j1Player.cpp
+c:\users\ricardo\documents\github\game-development-p1\dev_class5_handout\motor2d\j1player.cpp(301): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Motor2D.vcxproj -> C:\Users\Ricardo\Documents\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.exe
   Motor2D.vcxproj -> C:\Users\Ricardo\Documents\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.pdb (Full PDB)
