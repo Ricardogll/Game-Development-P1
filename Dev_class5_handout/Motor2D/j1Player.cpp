@@ -103,6 +103,17 @@ j1Player::j1Player() : j1Module()
 
 j1Player::~j1Player()
 {
+	//p2List_item<j1Module*>* item = modules.end;
+
+	//while (item != NULL)
+	//{
+	//	RELEASE(item->data);
+	//	item = item->prev;
+	//}
+
+	//modules.clear();
+
+	//config_file.reset();
 }
 
 
@@ -110,6 +121,32 @@ bool j1Player::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Player");
 	bool ret = true;
+
+	save_file.load_file("save_game.xml");
+	positionnode = save_file.child("game_state").child("position");
+	position_attr_x = positionnode.child("position").attribute("x");
+	position_attr_y = positionnode.child("position").attribute("y");
+
+
+	//for (pugi::xml_node tool = positionnode.first_child(); tool; tool = tool.next_sibling())
+	//{
+	//	//std::cout << "Tool:";
+	//	LOG("Tool:");
+	//	for (pugi::xml_attribute attr = tool.first_attribute(); attr; attr = attr.next_attribute())
+	//	{
+	//		LOG(" %s = %i", attr.name(), attr.value());
+	//		//int a = tool.attribute("x").as_int;
+	//		LOG("%d", tool.attribute("x").as_int());
+	//		//std::cout << " " << attr.name() << "=" << attr.value();
+	//	}
+
+	//	
+	//}
+	/*LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
+	pugi::xml_attribute positionattrx = positionnode.child("position").attribute("x");
+	positionattrx.set_value(100);
+	LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
+	LOG("aaa %d aaaa", positionattrx.as_int());*/
 
 
 
@@ -161,6 +198,20 @@ bool j1Player::Update()
 
 bool j1Player::PostUpdate()
 {
+
+	/*if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && needs_load) {
+		
+	
+	}*/
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		SavePosition();
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+		LoadPosition();
+	}
+
+
 	//Input();
 	//if (Falling())
 	//{
@@ -171,33 +222,51 @@ bool j1Player::PostUpdate()
 	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
+
 		playerpos.x += SPEED_X;
-		state = WALK_RIGHT;
+		if (jumping == false) {
+			state = WALK_RIGHT;
+		}
+		else {
+			state = JUMP_RIGHT;
+		}
 		
 	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
-		state = IDLE_RIGHT;
+		if (jumping == false) {
+			state = IDLE_RIGHT;
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		playerpos.x -= SPEED_X;
-		
-		state = WALK_LEFT;
+		if (jumping == false) {
+			state = WALK_LEFT;
+		}
+		else {
+			state = JUMP_LEFT;
+		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
-		state = IDLE_LEFT;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	{
-		state = JUMP_LEFT;
+		if (jumping == false) {
+			state = IDLE_LEFT;
+		}
 		
 	}
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	//{
+	//	state = JUMP_LEFT;
+	//	
+	//}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		state = JUMP_RIGHT;
+		if(playerdir==RIGHT)
+			state = JUMP_RIGHT;
+		else if(playerdir==LEFT)
+			state = JUMP_LEFT;
 		Jumping();
 
 	}
@@ -211,7 +280,20 @@ bool j1Player::PostUpdate()
 		//LOG("%d", GetCurrentTime());
 	}
 
-	speed.y += GRAVITY;
+
+	if (playerpos.y < 400) {
+		speed.y += GRAVITY;
+		
+	}
+	else if (playerpos.y >= 400) {
+		speed.y = 0;
+		onGround = true;
+		ledge_right.Reset();
+		ledge_left.Reset();
+		jump_right.Reset();
+		jump_left.Reset();
+		jumping = false;
+	}
 	playerpos.y += speed.y;
 	Draw();
 	return true;
@@ -232,8 +314,10 @@ bool j1Player::Jumping() {
 	//}
 	if (onGround)
 	{
+		jumping = true;
 		speed.y = -2.0f;
 		onGround = false;
+		playerpos.y-=5;
 	}
 
 	if (speed.y < -2.0f / 2) {
@@ -252,15 +336,50 @@ bool j1Player::CleanUp()
 }
 
 
-bool j1Player::Load(pugi::xml_node& node)
+bool j1Player::Load(pugi::xml_node& node)//document o node
 {
 	bool ret = true;
-	//pugi::xml_node player = node.append_child("position"); //mirar bien que hace esto
-	//player.append_attribute("x") = playerpos.x;
-	//player.append_attribute("y") = playerpos.y;
+	////pugi::xml_node player = node.append_child("position"); //mirar bien que hace esto
+	////player.append_attribute("x") = playerpos.x;
+	////player.append_attribute("y") = playerpos.y;
+	//playerpos.x = node.attribute("x").as_float;
+	//playerpos.y = node.attribute("y").as_float;
+
 
 	return ret;
 }
+
+
+//pugi::xml_node j1Player::LoadFile(pugi::xml_document& document)//document o node
+//{
+//	pugi::xml_node ret;
+//	pugi::xml_parse_result result = document.load_file("save_game.xml");
+//
+//	if (result == NULL)
+//		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
+//	else
+//		ret = document.child("config");
+//
+//	return ret;
+//}
+//
+//bool j1Player::LoadFile() {
+//	bool ret = true;
+//	pugi::xml_parse_result result = save_file.load_file("save_game.xml");
+//
+//	if (result == NULL) {
+//		LOG("Could not load map xml file camera.xml. pugi error: %s", result.description());
+//		ret = false;
+//	}
+//	else
+//	{
+//		positionnode = save_file.child("game_state");
+//	}
+//
+//	return ret;
+//	
+//
+//}
 
 void j1Player::Draw()
 {
@@ -300,4 +419,24 @@ void j1Player::Draw()
 	SDL_Rect render = current_animation->GetCurrentFrame();
 	App->render->Blit(graphics, playerpos.x, playerpos.y, &render);
 	//LOG("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+}
+
+
+
+
+void j1Player::LoadPosition() {
+
+	//LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
+	//pugi::xml_attribute positionattrx = positionnode.child("position").attribute("x");
+	//positionattrx.set_value(100);
+	//LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
+	playerpos.x = position_attr_x.as_int();
+	playerpos.y = position_attr_y.as_int();
+
+}
+
+//need to add attr for map 1/2 so we change if needed
+void j1Player::SavePosition() {
+	position_attr_x.set_value(playerpos.x);
+	position_attr_y.set_value(playerpos.y);
 }

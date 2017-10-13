@@ -30,7 +30,11 @@ enum STATE {
 	NO_STATE,
 };
 
-
+enum X_DIRECTION {
+	RIGHT,
+	LEFT,
+	NONE,
+};
 
 
 class j1Player :public j1Module
@@ -45,6 +49,11 @@ public:
 	bool Update();
 	bool PostUpdate();
 	bool Load(pugi::xml_node&);
+	void LoadPosition();
+	void SavePosition();
+	//void Load();
+//	pugi::xml_node LoadFile(pugi::xml_document& document);
+	//bool LoadFile();
 	void Draw();
 	bool Jumping();
 
@@ -66,8 +75,15 @@ private:
 	Animation ledge_left;
 
 	uint lastTime = 0;
-	bool jump_flag=false;
+	bool jumping=false;
 	bool onGround = true;
+	X_DIRECTION playerdir = NONE;
+	pugi::xml_node positionnode;
+	pugi::xml_document save_file;
+	pugi::xml_attribute position_attr_x;
+	pugi::xml_attribute position_attr_y;
+	//p2List<j1Module*> modules;
+	//mutable bool needs_load = true, needs_save = false;
 
 public:
 
