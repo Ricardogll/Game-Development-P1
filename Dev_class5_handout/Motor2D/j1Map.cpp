@@ -25,14 +25,57 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 	folder.create(config.child("folder").child_value());
 
-	Collider* mapcollider = App->collision->AddCollider({ 0,450,1000,5 }, COLLIDER_FLOOR, this);
-	Collider* mapcollider1 = App->collision->AddCollider({400,300,50,50},COLLIDER_FLOOR,this);
-	Collider* mapcollider2 = App->collision->AddCollider({ 200,400,50,50 }, COLLIDER_FLOOR, this);
-	Collider* mapcollider3 = App->collision->AddCollider({ 650,390,50,15 }, COLLIDER_LEDGE, this);
-	Collider* mapcollider4 = App->collision->AddCollider({ 850,390,50,50 }, COLLIDER_LEDGE, this);
-	Collider* mapcollider5 = App->collision->AddCollider({ 100,340,50,50 }, COLLIDER_FLOOR, this);
-	Collider* mapcollider6 = App->collision->AddCollider({ 920,400,50,50 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider3 = App->collision->AddCollider({ 192,292,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider4 = App->collision->AddCollider({ 256,240,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider6 = App->collision->AddCollider({ 288,208,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider8 = App->collision->AddCollider({ 352,208,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider9 = App->collision->AddCollider({ 400,224,32,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider11 = App->collision->AddCollider({ 464,224,32,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider13 = App->collision->AddCollider({ 432,272,32,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider15 = App->collision->AddCollider({ 528,224,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider17 = App->collision->AddCollider({ 592,192,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider19 = App->collision->AddCollider({ 624,160,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider21 = App->collision->AddCollider({ 704,160,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider22 = App->collision->AddCollider({ 736,384,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider24 = App->collision->AddCollider({ 784,384,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider25 = App->collision->AddCollider({ 784,416,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider26 = App->collision->AddCollider({ 880,416,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider29 = App->collision->AddCollider({ 880,384,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider34 = App->collision->AddCollider({ 928,384,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider31 = App->collision->AddCollider({ 928,416,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider32 = App->collision->AddCollider({ 1024,416,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider33 = App->collision->AddCollider({ 1024,384,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider39 = App->collision->AddCollider({ 1520,208,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider40 = App->collision->AddCollider({ 1456,224,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider41 = App->collision->AddCollider({ 1392,240,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider42 = App->collision->AddCollider({ 1328,256,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider43 = App->collision->AddCollider({ 1264,272,16,16 }, COLLIDER_LEDGE, this); 
+	Collider* mapcollider44 = App->collision->AddCollider({ 1184,272,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider45 = App->collision->AddCollider({ 1136,320,16,16 }, COLLIDER_LEDGE, this);
+	Collider* mapcollider46 = App->collision->AddCollider({ 1088,368,16,16 }, COLLIDER_LEDGE, this);
 
+	Collider* mapcollider = App->collision->AddCollider({ 0,0,1600,32}, COLLIDER_FLOOR, this);
+	Collider* mapcollider1 = App->collision->AddCollider({0,292,192,192},COLLIDER_FLOOR,this);
+	Collider* mapcollider2 = App->collision->AddCollider({ 192,292,16,192 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider5 = App->collision->AddCollider({ 256,240,112,240 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider7 = App->collision->AddCollider({ 288,208,80,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider10 = App->collision->AddCollider({ 400,224,32,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider12 = App->collision->AddCollider({ 464,224,32,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider14 = App->collision->AddCollider({ 432,272,32,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider16 = App->collision->AddCollider({ 528,224,192,256 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider18 = App->collision->AddCollider({ 592,192,128,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider20 = App->collision->AddCollider({ 624,160,96,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider23 = App->collision->AddCollider({ 720,384,32,96 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider27 = App->collision->AddCollider({ 784,384,112,16 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider28 = App->collision->AddCollider({ 784,416,112,16 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider30 = App->collision->AddCollider({ 816,400,48,16 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider35 = App->collision->AddCollider({ 928,384,112,16 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider36 = App->collision->AddCollider({ 928,416,112,16 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider37 = App->collision->AddCollider({ 960,400,48,16 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider38 = App->collision->AddCollider({ 1520,208,80,272 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider47 = App->collision->AddCollider({ 1184,272,96,208 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider48 = App->collision->AddCollider({ 1136,320,48,160 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider49 = App->collision->AddCollider({ 1088,368,48,112 }, COLLIDER_FLOOR, this);
 	return ret;
 }
 

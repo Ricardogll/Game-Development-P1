@@ -1,7 +1,5 @@
-﻿  j1Player.cpp
-c:\users\ricardo\documents\github\game-development-p1\dev_class5_handout\motor2d\j1player.cpp(312): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ricardo\documents\github\game-development-p1\dev_class5_handout\motor2d\j1player.cpp(439): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ricardo\documents\github\game-development-p1\dev_class5_handout\motor2d\j1player.cpp(461): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ricardo\documents\github\game-development-p1\dev_class5_handout\motor2d\j1player.cpp(462): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Motor2D.vcxproj -> C:\Users\Ricardo\Documents\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.exe
-  Motor2D.vcxproj -> C:\Users\Ricardo\Documents\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.pdb (Full PDB)
+﻿  j1Map.cpp
+c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(95): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(96): warning C4018: '<': no coinciden signed/unsigned
+  Motor2D.vcxproj -> C:\Users\adria\OneDrive\Documentos\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.exe
+  Motor2D.vcxproj -> C:\Users\adria\OneDrive\Documentos\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.pdb (Partial PDB)
