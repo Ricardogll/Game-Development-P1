@@ -174,36 +174,16 @@ bool j1Player::Start()
 bool j1Player::Update()
 {
 
-	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"); //log doesnt appear. Update doesnt run. why?
-	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	//{
-	//	//playerpos.x += SPEED_X;
-	//	state = WALK_RIGHT;
-	//	LOG("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-	//}
-	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
-	//{
-	//	state = IDLE_RIGHT;
-	//}
-	//
-	//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	//{
-	//	//playerpos.y += SPEED_Y;
-	//	state = WALK_LEFT;
-	//}
-	//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
-	//{
-	//	state = IDLE_LEFT;
-	//}
+	
 	return true;
 }
 
 bool j1Player::PostUpdate()
 {
-
+	currentTime = SDL_GetTicks();
 	/*if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && needs_load) {
-		
-	
+
+
 	}*/
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		SavePosition();
@@ -222,41 +202,42 @@ bool j1Player::PostUpdate()
 	//Draw();
 	//LOG("AAAAAAASDASDSDASDASDSDSDSDSDADASDASDADSSD");
 	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && in_ledge == false && ledge_jump_x_disabled == false)
 	{
 
-		playerpos.x += SPEED_X;
+		speed.x = SPEED_X;
 		if (jumping == false) {
 			state = WALK_RIGHT;
 		}
 		else {
 			state = JUMP_RIGHT;
 		}
-		
+		playerdir = RIGHT;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP && in_ledge == false && ledge_jump_x_disabled == false)
 	{
 		if (jumping == false) {
 			state = IDLE_RIGHT;
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && in_ledge == false && ledge_jump_x_disabled == false)
 	{
-		playerpos.x -= SPEED_X;
+		speed.x = -SPEED_X;
 		if (jumping == false) {
 			state = WALK_LEFT;
 		}
 		else {
 			state = JUMP_LEFT;
 		}
+		playerdir = LEFT;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP && in_ledge == false && ledge_jump_x_disabled == false)
 	{
 		if (jumping == false) {
 			state = IDLE_LEFT;
 		}
-		
+
 	}
 	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	//{
@@ -265,12 +246,20 @@ bool j1Player::PostUpdate()
 	//}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		if(playerdir==RIGHT)
+		if (playerdir == RIGHT)
 			state = JUMP_RIGHT;
-		else if(playerdir==LEFT)
+		else if (playerdir == LEFT)
 			state = JUMP_LEFT;
 		Jumping();
-
+		speed.x = SPEED_X;
+		if (in_ledge) {
+			disable_ledge = SDL_GetTicks();
+			ledge_disabled = true;
+			ledge_jump_x_disabled = true;
+			in_ledge = false;
+			on_ledge_left = false;
+			on_ledge_right = false;
+		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_V) == KEY_REPEAT)
 	{
@@ -283,44 +272,56 @@ bool j1Player::PostUpdate()
 	}
 
 
-	if (playerpos.y < 400 && touching_floor == false) {
+	if (touching_floor == false && in_ledge == false) {
 		speed.y += GRAVITY;
-		
+
 	}
 	else// if (playerpos.y >= 400) 
 	{
-		LOG("Vy = 0");
+
 		speed.y = 0;
 		onGround = true;
-		ledge_right.Reset();
-		ledge_left.Reset();
-		jump_right.Reset();
-		jump_left.Reset();
+		
+		//jump_right.Reset();
+		//jump_left.Reset();
 		jumping = false;
 	}
+
+
+
+	if (on_ledge_right) {
+		
+		state = LEDGE_RIGHT;
+	}
+
+	if (on_ledge_left){
+		
+		state = LEDGE_LEFT;
+}
+	
+	if (currentTime > disable_ledge + 50 && disable_ledge != 0) {
+		ledge_jump_x_disabled = false;
+		ledge_disabled = false;
+		LOG("jump x enabled & ledge ON");
+		disable_ledge = 0;
+		
+	}
+	playerpos.x += speed.x;
 	playerpos.y += speed.y;
+	speed.x = 0;
 	playerCollider->SetPos(playerpos.x, playerpos.y);
 	Draw();
-	if (touching_floor)
-		LOG("trueeee");
+	
 	return true;
 }
 
 bool j1Player::Jumping() {
 	bool ret = true;
-	//uint currentTime = SDL_GetTicks();
-
-	//if (currentTime > (lastTime + 1000)) {
-	//
-	//	lastTime = currentTime;
-	//	jump_flag = true;
-	//}
-
-	//if (jump_flag) {
-	//	playerpos.y += SPEED_Y;
-	//}
+	
 	if (onGround)
 	{
+		jump_right.Reset();
+		jump_left.Reset();
 		jumping = true;
 		speed.y = -2.0f;
 		onGround = false;
@@ -328,8 +329,8 @@ bool j1Player::Jumping() {
 		touching_floor = false;
 	}
 
-	if (speed.y < -2.0f / 2) {
-		speed.y = -2.0f / 2;
+	if (speed.y < -1.0f) {
+		speed.y = -1.0f;
 	}
 
 	return ret;
@@ -424,9 +425,28 @@ void j1Player::Draw()
 		break;
 
 	}
+
+
+	//so jump animation doesnt get stuck if we just jump and not press anything else after
+	if (current_animation->Finished() && current_animation == &jump_right && touching_floor) {
+		current_animation = &idle_right;
+	}else if (current_animation->Finished() && current_animation == &jump_left && touching_floor) {
+		current_animation = &idle_left;
+	}
+
+
 	SDL_Rect render = current_animation->GetCurrentFrame();
 	App->render->Blit(graphics, playerpos.x, playerpos.y, &render);
+	//last_animation_2 = last_animation;
+	//last_animation = current_animation;
+	if(last_state!=last_state_2)
+		last_state_2 = last_state;
+
+	if(last_state!=state)
+		last_state = state;
 	//LOG("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+	
 }
 
 
@@ -454,11 +474,14 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 
 	if (c2->type == COLLIDER_FLOOR)
 	{
+		
 		//LOG("COLLISION PLAYER WITH FLOOR");
 		if (c1->rect.y < c2->rect.y + c2->rect.h && c1->rect.y + 3 > c2->rect.y + c2->rect.h)
 
 		{
 			playerpos.y = playerpos.y + 1;
+			speed.y = GRAVITY;
+			
 			/*if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 				playerpos.y = playerpos.y + 0.5f;*/
 			
@@ -466,10 +489,15 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 		else if (c1->rect.y + c1->rect.h > c2->rect.y && c1->rect.y + c1->rect.h - 3< c2->rect.y)
 
 		{
-			playerpos.y = playerpos.y - speed.y;
+			//playerpos.y = playerpos.y - speed.y;
+			//state = last_state_2;
 			touching_floor = true;
-			
-			LOG("touching_floor = TRUE");
+			if ((c1->rect.x + 5 >= c2->rect.x + c2->rect.w && c1->rect.x - 5 <= c2->rect.x + c2->rect.w)
+				|| (c1->rect.x + c1->rect.w - 5 <= c2->rect.x && c1->rect.x + c1->rect.w + 5 >= c2->rect.x)) {
+				touching_floor = false;
+				//LOG("last pixeelllllllll");
+			}
+			//LOG("touching_floor = TRUE");
 		}
 
 
@@ -483,9 +511,88 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 			playerpos.x = playerpos.x + 1;
 
 		}
+
+		//**if player last pixel touches coll last pixel then touching_floor = false
+
+		/*if ((c1->rect.x +5 >= c2->rect.x + c2->rect.w && c1->rect.x - 5 <= c2->rect.x + c2->rect.w)
+			|| (c1->rect.x + c1->rect.w -5 <= c2->rect.x && c1->rect.x + c1->rect.w + 5 >= c2->rect.x)) {
+			touching_floor = false;
+			LOG("last pixeelllllllll");
+		}*/
+
 	}
 	if (c2->type == COLLIDER_DIE) 
 	{
+
+	}
+
+	if (c2->type == COLLIDER_LEDGE && in_ledge==false && ledge_disabled == false)
+	{
+
+
+		//same as FLOOR until...
+		if (c1->rect.y < c2->rect.y + c2->rect.h && c1->rect.y + 3 > c2->rect.y + c2->rect.h)
+
+		{
+			playerpos.y = playerpos.y + 1;
+			speed.y = GRAVITY;
+
+			/*if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			playerpos.y = playerpos.y + 0.5f;*/
+
+		}
+		else if (c1->rect.y + c1->rect.h > c2->rect.y && c1->rect.y + c1->rect.h - 3< c2->rect.y)
+
+		{
+			//playerpos.y = playerpos.y - speed.y;
+
+			touching_floor = true;
+			if ((c1->rect.x + 5 >= c2->rect.x + c2->rect.w && c1->rect.x - 5 <= c2->rect.x + c2->rect.w)
+				|| (c1->rect.x + c1->rect.w - 5 <= c2->rect.x && c1->rect.x + c1->rect.w + 5 >= c2->rect.x)) {
+				touching_floor = false;
+				//LOG("last pixeelllllllll");
+			}
+			//LOG("touching_floor = TRUE");
+		}
+
+
+		else if (c1->rect.x + c1->rect.w > c2->rect.x && c1->rect.x + c1->rect.w - 3 < c2->rect.x)
+		{
+			playerpos.x = playerpos.x - 1;
+
+		}
+		else if (c1->rect.x < c2->rect.x + c2->rect.w && c1->rect.x + 3 > c2->rect.x + c2->rect.w)
+		{
+			playerpos.x = playerpos.x + 1;
+
+		}
+
+		
+		// here.
+		//if player y is between ledge y and half of its height, then he will grab
+
+
+		if (c2->rect.y < c1->rect.y && c1->rect.y - (c2->rect.h / 2) < c2->rect.y) {
+			speed.x = 0;
+			ledge_right.Reset();
+			ledge_left.Reset();
+			//speed.y = 0;
+			LOG("vvvvvvvvvvvvvvvvvvvv");
+			if (c1->rect.x < c2->rect.x) {
+				state = LEDGE_RIGHT;
+				on_ledge_right = true;
+			}
+			else {
+				state = LEDGE_LEFT;
+				on_ledge_left = true;
+			}
+			in_ledge = true;
+		}
+		
+		//**************
+		/*if (c2->rect.y >= c1->rect.y) {
+			LOG("sdadsadds");
+		}*/
 
 	}
 }

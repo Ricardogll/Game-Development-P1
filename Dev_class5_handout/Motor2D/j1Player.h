@@ -65,7 +65,11 @@ private:
 	SDL_Texture* graphics = nullptr;
 	fPoint speed;
 	STATE state=NO_STATE;
-	Animation* current_animation;
+	Animation* current_animation = nullptr;
+	//Animation* last_animation = nullptr;
+	//Animation* last_animation_2 = nullptr;
+	STATE last_state = NO_STATE;
+	STATE last_state_2 = NO_STATE;
 	Animation idle_right;
 	Animation walk_right;
 	Animation jump_right;
@@ -85,13 +89,20 @@ private:
 	pugi::xml_attribute position_attr_y;
 	//p2List<j1Module*> modules;
 	//mutable bool needs_load = true, needs_save = false;
-
+	bool on_ledge_right = false;
+	bool on_ledge_left = false;
 public:
 
 	fPoint playerpos;
 	//fPoint playervel;
 	Collider* playerCollider;
 	bool touching_floor = false;
+	bool in_ledge = false;
+	bool ledge_disabled = false;
+	uint disable_ledge = 0;
+	uint currentTime = 0;
+	bool ledge_jump_x_disabled = false;
+	
 
 
 };
