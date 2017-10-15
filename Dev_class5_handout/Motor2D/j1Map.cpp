@@ -79,6 +79,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	Collider* mapcollider49 = App->collision->AddCollider({ 1088,368,48,112 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider50= App->collision->AddCollider({ 1600,0,5,500 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider51 = App->collision->AddCollider({ 0,0,5,500 }, COLLIDER_FLOOR, this);
+
 	return ret;
 }
 
