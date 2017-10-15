@@ -25,6 +25,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 	folder.create(config.child("folder").child_value());
 
+
 	Collider* mapcollider3 = App->collision->AddCollider({ 192,292,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider4 = App->collision->AddCollider({ 256,240,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider6 = App->collision->AddCollider({ 288,208,16,16 }, COLLIDER_LEDGE, this);
@@ -76,6 +77,8 @@ bool j1Map::Awake(pugi::xml_node& config)
 	Collider* mapcollider47 = App->collision->AddCollider({ 1184,272,96,208 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider48 = App->collision->AddCollider({ 1136,320,48,160 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider49 = App->collision->AddCollider({ 1088,368,48,112 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider50= App->collision->AddCollider({ 1600,0,5,500 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider51 = App->collision->AddCollider({ 0,0,5,500 }, COLLIDER_FLOOR, this);
 	return ret;
 }
 

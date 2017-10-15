@@ -161,10 +161,10 @@ bool j1Player::Start()
 	graphics = App->tex->Load("maps/PlayerSprites.png");
 	state = IDLE_RIGHT;
 	
-	playerpos.x = 100;
-	playerpos.y = 100;
+	playerpos.x = 10;
+	playerpos.y = 240;
 	speed.x = 0;
-	//speed.y = GRAVITY;
+	speed.y = GRAVITY;
 	speed.y = 0;
 	playerCollider = App->collision->AddCollider({ (int)playerpos.x,(int)playerpos.y,20,35 }, COLLIDER_PLAYER, this);
 

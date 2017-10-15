@@ -8,7 +8,7 @@
 #include	"j1Textures.h"
 #include	"Animation.h"
 
-#define GRAVITY 0.01f //change gravity after testing it
+#define GRAVITY 0.015f //change gravity after testing it
 #define SPEED_X 1.0f
 #define SPEED_Y 0.3f
 
