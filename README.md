@@ -26,9 +26,13 @@ Game:
          
 Debug:    
           
-          F1 and F2 to save and load the player position.
+          F1 to load 1st map.
           
           F3 to see colliders.
+          
+          F5 to save position.
+          
+          F6 to load previous saved position.
 
 
 --------
