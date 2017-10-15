@@ -1,5 +1,10 @@
 ﻿  j1Map.cpp
+<<<<<<< HEAD
 c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(107): warning C4018: '<': no coinciden signed/unsigned
 c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(108): warning C4018: '<': no coinciden signed/unsigned
+=======
+c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(98): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(99): warning C4018: '<': no coinciden signed/unsigned
+>>>>>>> parent of a64cf2b... some things
   Motor2D.vcxproj -> C:\Users\adria\OneDrive\Documentos\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.exe
   Motor2D.vcxproj -> C:\Users\adria\OneDrive\Documentos\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.pdb (Partial PDB)

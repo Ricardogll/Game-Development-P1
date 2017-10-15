@@ -6,7 +6,6 @@
     <camera x="100" y="0"/>
   </renderer>
   <position>
-    <position x="30" y="258"/>
-    <start x="30" y="258"/>
+    <position x="400" y="400"/>
   </position>
 </game_state>

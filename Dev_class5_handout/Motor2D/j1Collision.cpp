@@ -28,7 +28,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_LEDGE][COLLIDER_DIE] = false;
 	matrix[COLLIDER_LEDGE][COLLIDER_PLAYER] = true;
 	matrix[COLLIDER_LEDGE][COLLIDER_LEDGE] = false;
-	
+	//name.create("collider");
 
 }
 

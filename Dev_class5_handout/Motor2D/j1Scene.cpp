@@ -8,7 +8,6 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1Scene.h"
-#include "j1Player.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -23,12 +22,6 @@ j1Scene::~j1Scene()
 bool j1Scene::Awake()
 {
 	LOG("Loading Scene");
-
-	save_file.load_file("save_game.xml");
-	renderernode = save_file.child("game_state").child("renderer");
-	camera_x = renderernode.attribute("x");
-	camera_y = renderernode.attribute("y");
-
 	bool ret = true;
 
 	return ret;
@@ -52,38 +45,36 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	
+	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		App->LoadGame();
 
-	/*if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		LOG("%f", App->player->playerpos.x);
+	if(App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+		App->SaveGame();
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
-		LOG("%d", App->render->camera.x);*/
+	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		App->render->camera.y -= 1;
 
-	
+	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		App->render->camera.y += 1;
 
-	if (App->player->playerpos.x > 500 && App->player->playerpos.x < 1075) {
-		App->render->camera.x = -(App->player->playerpos.x-500);
-		
-	}
-	if (App->player->player_died) {
-	
-		reset = P_DIE;
-		resetCamera(reset);
-	}
+	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		App->render->camera.x -= 1;
 
-	if (App->player->player_load) {
-		reset = P_LOAD;
-		resetCamera(reset);
-	}
+	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		App->render->camera.x += 1;
 
+	//App->render->Blit(img, 0, 0);
 	App->map->Draw();
 
-	
+	// TODO 7: Set the window title like
+	// "Map:%dx%d Tiles:%dx%d Tilesets:%d"
 	iPoint mousexy;
 	App->input->GetMousePosition(mousexy.x, mousexy.y);
 	mousexy = App->map->MapToWorld(mousexy.x, mousexy.y);
-	p2SString title("Into the Jungle");
+	p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse x:%d Mouse y:%d",
+		App->map->data.width, App->map->data.height,
+		App->map->data.tile_width, App->map->data.tile_height,
+		App->map->data.tilesets.count(), mousexy.x, mousexy.y);
 
 	App->win->SetTitle(title.GetString());
 	return true;
@@ -106,31 +97,4 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
-}
-
-
-bool j1Scene::resetCamera(CamReset reset) {
-	bool ret = true;
-	
-	if (reset == P_DIE) {
-		App->render->camera.x = -(App->player->playerpos.x - 30);
-		App->player->player_died = false;
-		reset = NOTHING;
-	}
-	else if (reset == P_LOAD) {
-		if (App->player->playerpos.x > 500 && App->player->playerpos.x < 1075) {
-
-			App->render->camera.x = -(App->player->position_attr_x.as_int() - 500);
-		}
-		else if (App->player->playerpos.x <= 500) {
-			App->render->camera.x = -(App->player->position_attr_x.as_int() - 30);
-		}
-		else if (App->player->playerpos.x >= 1075) {
-			App->render->camera.x = -574;
-		}
-		App->player->player_load = false;
-		reset = NOTHING;
-	}
-
-	return ret;
 }
