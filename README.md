@@ -16,13 +16,17 @@ Download the zip file and extract it. Open the folder and execute the .exe.
 
 ## Controls
 
-Game:     A and D for moving left and right.
+Game:     
+
+          A and D for moving left and right.
 
           SPACE to jump.
           
           SPACE when holding on a ledge to go up.
          
-Debug:    F1 and F2 to save and load the player position.
+Debug:    
+          
+          F1 and F2 to save and load the player position.
           
           F3 to see colliders.
 
