@@ -88,7 +88,11 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	float speed = 0;
+=======
+
+>>>>>>> parent of 1870ece... parallax
 	
 =======
 
@@ -113,22 +117,7 @@ void j1Map::Draw()
 
 						//iPoint world = MapToWorld(i, j);
 
-						App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
-
-						if (draw_layers->data->name == "parallax2") {
-							speed = 0.5f;
-							App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
-						}
-						if (draw_layers->data->name == "parallax1") {
-							speed = 0.7f;
-							App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
-						}
-						if (draw_layers->data->name == "jungle") {
-							speed = 1.0f;
-							App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
-						}
-					
-						}
+						App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect);
 					}
 				}
 			}
@@ -138,7 +127,7 @@ void j1Map::Draw()
 	}
 		// TODO 9: Complete the draw function
 
-
+}
 
 
 iPoint j1Map::MapToWorld(int x, int y) const
