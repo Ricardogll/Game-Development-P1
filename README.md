@@ -44,7 +44,7 @@ Fx used: [jump fx](https://freesound.org/people/fins/sounds/172205/)
 
 ----------
 
-##License
+## License
 
 This is free and unencumbered software released into the public domain.
 
