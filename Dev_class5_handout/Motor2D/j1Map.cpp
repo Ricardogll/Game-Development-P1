@@ -95,7 +95,7 @@ void j1Map::Draw()
 {
 	if(map_loaded == false)
 		return;
-
+	float speed = 0;
 	
 	p2List_item<TileSet*>* draw_tilesets = data.tilesets.start;
 	p2List_item<MapLayer*>* draw_layers = data.layers.start;
@@ -116,7 +116,22 @@ void j1Map::Draw()
 
 						
 
-						App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect);
+						App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
+
+						if (draw_layers->data->name == "parallax2") {
+							speed = 0.5f;
+							App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
+						}
+						if (draw_layers->data->name == "parallax1") {
+							speed = 0.7f;
+							App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
+						}
+						if (draw_layers->data->name == "jungle") {
+							speed = 1.0f;
+							App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect, speed);
+						}
+					
+						}
 					}
 				}
 			}
@@ -126,7 +141,7 @@ void j1Map::Draw()
 	}
 		
 
-}
+
 
 
 iPoint j1Map::MapToWorld(int x, int y) const
