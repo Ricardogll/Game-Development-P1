@@ -8,6 +8,7 @@
 #include "j1Map.h"
 //#include "SDL\include\SDL_timer.h"
 #include "j1Collision.h"
+#include "j1Audio.h"
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
@@ -104,17 +105,7 @@ j1Player::j1Player() : j1Module()
 
 j1Player::~j1Player()
 {
-	//p2List_item<j1Module*>* item = modules.end;
-
-	//while (item != NULL)
-	//{
-	//	RELEASE(item->data);
-	//	item = item->prev;
-	//}
-
-	//modules.clear();
-
-	//config_file.reset();
+	
 }
 
 
@@ -127,27 +118,10 @@ bool j1Player::Awake(pugi::xml_node& config)
 	positionnode = save_file.child("game_state").child("position");
 	position_attr_x = positionnode.child("position").attribute("x");
 	position_attr_y = positionnode.child("position").attribute("y");
+	starting_x = positionnode.child("start").attribute("x");
+	starting_y = positionnode.child("start").attribute("y");
 
-
-	//for (pugi::xml_node tool = positionnode.first_child(); tool; tool = tool.next_sibling())
-	//{
-	//	//std::cout << "Tool:";
-	//	LOG("Tool:");
-	//	for (pugi::xml_attribute attr = tool.first_attribute(); attr; attr = attr.next_attribute())
-	//	{
-	//		LOG(" %s = %i", attr.name(), attr.value());
-	//		//int a = tool.attribute("x").as_int;
-	//		LOG("%d", tool.attribute("x").as_int());
-	//		//std::cout << " " << attr.name() << "=" << attr.value();
-	//	}
-
-	//	
-	//}
-	/*LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
-	pugi::xml_attribute positionattrx = positionnode.child("position").attribute("x");
-	positionattrx.set_value(100);
-	LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
-	LOG("aaa %d aaaa", positionattrx.as_int());*/
+	
 
 
 
@@ -156,15 +130,19 @@ bool j1Player::Awake(pugi::xml_node& config)
 
 bool j1Player::Start()
 {
+
+	
 	LOG("starting player");
 	bool ret = true;
 	graphics = App->tex->Load("maps/PlayerSprites.png");
+	jumpfx = App->audio->LoadFx("audio/fx/jump.wav");
+	
 	state = IDLE_RIGHT;
 	
-	playerpos.x = 10;
-	playerpos.y = 240;
+	playerpos.x = starting_x.as_float();
+	playerpos.y = starting_y.as_float();
 	speed.x = 0;
-	speed.y = GRAVITY;
+	
 	speed.y = 0;
 	playerCollider = App->collision->AddCollider({ (int)playerpos.x,(int)playerpos.y,20,35 }, COLLIDER_PLAYER, this);
 
@@ -181,27 +159,23 @@ bool j1Player::Update()
 bool j1Player::PostUpdate()
 {
 	currentTime = SDL_GetTicks();
-	/*if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && needs_load) {
 
-
-	}*/
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		SavePosition();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
 		LoadPosition();
+		player_load = true;
+		state = IDLE_RIGHT;
+		touching_floor = false;
+		speed.y = 0;
+		speed.x = 0;
+		
 	}
 
 
-	//Input();
-	//if (Falling())
-	//{
-	//	position.y += 1.0f;
-	//}
-	//Draw();
-	//LOG("AAAAAAASDASDSDASDASDSDSDSDSDADASDASDADSSD");
-	//LOG("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && in_ledge == false && ledge_jump_x_disabled == false)
 	{
 
@@ -239,11 +213,7 @@ bool j1Player::PostUpdate()
 		}
 
 	}
-	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	//{
-	//	state = JUMP_LEFT;
-	//	
-	//}
+	
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		if (playerdir == RIGHT)
@@ -261,15 +231,7 @@ bool j1Player::PostUpdate()
 			on_ledge_right = false;
 		}
 	}
-	if (App->input->GetKey(SDL_SCANCODE_V) == KEY_REPEAT)
-	{
-		state = LEDGE_RIGHT;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_REPEAT)
-	{
-		state = LEDGE_LEFT;
-		//LOG("%d", GetCurrentTime());
-	}
+
 
 
 	if (touching_floor == false && in_ledge == false) {
@@ -327,10 +289,11 @@ bool j1Player::Jumping() {
 		onGround = false;
 		playerpos.y-=5;
 		touching_floor = false;
+		App->audio->PlayFx(jumpfx);
 	}
 
-	if (speed.y < -1.0f) {
-		speed.y = -1.0f;
+	if (speed.y < -1.5f) {
+		speed.y = -1.5f;
 	}
 
 	return ret;
@@ -345,50 +308,17 @@ bool j1Player::CleanUp()
 }
 
 
-bool j1Player::Load(pugi::xml_node& node)//document o node
+bool j1Player::Load(pugi::xml_node& node)
 {
 	bool ret = true;
-	////pugi::xml_node player = node.append_child("position"); //mirar bien que hace esto
-	////player.append_attribute("x") = playerpos.x;
-	////player.append_attribute("y") = playerpos.y;
-	//playerpos.x = node.attribute("x").as_float;
-	//playerpos.y = node.attribute("y").as_float;
+
 
 
 	return ret;
 }
 
 
-//pugi::xml_node j1Player::LoadFile(pugi::xml_document& document)//document o node
-//{
-//	pugi::xml_node ret;
-//	pugi::xml_parse_result result = document.load_file("save_game.xml");
-//
-//	if (result == NULL)
-//		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
-//	else
-//		ret = document.child("config");
-//
-//	return ret;
-//}
-//
-//bool j1Player::LoadFile() {
-//	bool ret = true;
-//	pugi::xml_parse_result result = save_file.load_file("save_game.xml");
-//
-//	if (result == NULL) {
-//		LOG("Could not load map xml file camera.xml. pugi error: %s", result.description());
-//		ret = false;
-//	}
-//	else
-//	{
-//		positionnode = save_file.child("game_state");
-//	}
-//
-//	return ret;
-//	
-//
-//}
+
 
 void j1Player::Draw()
 {
@@ -437,8 +367,7 @@ void j1Player::Draw()
 
 	SDL_Rect render = current_animation->GetCurrentFrame();
 	App->render->Blit(graphics, playerpos.x, playerpos.y, &render);
-	//last_animation_2 = last_animation;
-	//last_animation = current_animation;
+
 	if(last_state!=last_state_2)
 		last_state_2 = last_state;
 
@@ -454,16 +383,13 @@ void j1Player::Draw()
 
 void j1Player::LoadPosition() {
 
-	//LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
-	//pugi::xml_attribute positionattrx = positionnode.child("position").attribute("x");
-	//positionattrx.set_value(100);
-	//LOG(" aa %d  aaaaa", positionnode.child("position").attribute("x").as_int());
+
 	playerpos.x = position_attr_x.as_int();
 	playerpos.y = position_attr_y.as_int();
 
 }
 
-//need to add attr for map 1/2 so we change if needed
+
 void j1Player::SavePosition() {
 	position_attr_x.set_value(playerpos.x);
 	position_attr_y.set_value(playerpos.y);
@@ -475,29 +401,27 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 	if (c2->type == COLLIDER_FLOOR)
 	{
 		
-		//LOG("COLLISION PLAYER WITH FLOOR");
+		
 		if (c1->rect.y < c2->rect.y + c2->rect.h && c1->rect.y + 3 > c2->rect.y + c2->rect.h)
 
 		{
 			playerpos.y = playerpos.y + 1;
 			speed.y = GRAVITY;
 			
-			/*if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-				playerpos.y = playerpos.y + 0.5f;*/
+			
 			
 		}
 		else if (c1->rect.y + c1->rect.h > c2->rect.y && c1->rect.y + c1->rect.h - 3< c2->rect.y)
 
 		{
-			//playerpos.y = playerpos.y - speed.y;
-			//state = last_state_2;
+			
 			touching_floor = true;
 			if ((c1->rect.x + 5 >= c2->rect.x + c2->rect.w && c1->rect.x - 5 <= c2->rect.x + c2->rect.w)
 				|| (c1->rect.x + c1->rect.w - 5 <= c2->rect.x && c1->rect.x + c1->rect.w + 5 >= c2->rect.x)) {
 				touching_floor = false;
-				//LOG("last pixeelllllllll");
+				
 			}
-			//LOG("touching_floor = TRUE");
+			
 		}
 
 
@@ -512,17 +436,16 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 
 		}
 
-		//**if player last pixel touches coll last pixel then touching_floor = false
-
-		/*if ((c1->rect.x +5 >= c2->rect.x + c2->rect.w && c1->rect.x - 5 <= c2->rect.x + c2->rect.w)
-			|| (c1->rect.x + c1->rect.w -5 <= c2->rect.x && c1->rect.x + c1->rect.w + 5 >= c2->rect.x)) {
-			touching_floor = false;
-			LOG("last pixeelllllllll");
-		}*/
+	
 
 	}
 	if (c2->type == COLLIDER_DIE) 
 	{
+		playerpos.x = starting_x.as_float();
+		playerpos.y = starting_y.as_float();
+		speed.x = 0;
+		speed.y = 0;
+		player_died = true;
 
 	}
 
@@ -537,22 +460,21 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 			playerpos.y = playerpos.y + 1;
 			speed.y = GRAVITY;
 
-			/*if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-			playerpos.y = playerpos.y + 0.5f;*/
+			
 
 		}
 		else if (c1->rect.y + c1->rect.h > c2->rect.y && c1->rect.y + c1->rect.h - 3< c2->rect.y)
 
 		{
-			//playerpos.y = playerpos.y - speed.y;
+			
 
 			touching_floor = true;
 			if ((c1->rect.x + 5 >= c2->rect.x + c2->rect.w && c1->rect.x - 5 <= c2->rect.x + c2->rect.w)
 				|| (c1->rect.x + c1->rect.w - 5 <= c2->rect.x && c1->rect.x + c1->rect.w + 5 >= c2->rect.x)) {
 				touching_floor = false;
-				//LOG("last pixeelllllllll");
+				
 			}
-			//LOG("touching_floor = TRUE");
+		
 		}
 
 
@@ -576,8 +498,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 			speed.x = 0;
 			ledge_right.Reset();
 			ledge_left.Reset();
-			//speed.y = 0;
-			LOG("vvvvvvvvvvvvvvvvvvvv");
+		
 			if (c1->rect.x < c2->rect.x) {
 				state = LEDGE_RIGHT;
 				on_ledge_right = true;
@@ -588,11 +509,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2) {
 			}
 			in_ledge = true;
 		}
-		
-		//**************
-		/*if (c2->rect.y >= c1->rect.y) {
-			LOG("sdadsadds");
-		}*/
+	
 
 	}
 }

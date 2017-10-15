@@ -49,21 +49,21 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool PostUpdate();
-	//update_status PostUpdate();
+	
 	bool CleanUp();
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
 	bool EraseCollider(Collider* collider);
 	void DebugDraw();
 
-	//Collider* playercoll;
+	
 
 private:
 
 	Collider* colliders[MAX_COLLIDERS];
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = true;
-
+	bool debug = false;
+	
 };
 
 #endif 

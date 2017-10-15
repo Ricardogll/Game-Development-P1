@@ -7,6 +7,7 @@
 #include "j1Player.h"
 #include <math.h>
 #include "j1Collision.h"
+#include "j1Audio.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -20,11 +21,18 @@ j1Map::~j1Map()
 // Called before render is available
 bool j1Map::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Map Parser");
+	
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
 
+	return ret;
+}
+
+bool j1Map::Start() {
+	bool ret = true;
+
+	App->audio->PlayMusic("audio/music/TheJungleFloor.ogg");
 
 	Collider* mapcollider3 = App->collision->AddCollider({ 192,292,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider4 = App->collision->AddCollider({ 256,240,16,16 }, COLLIDER_LEDGE, this);
@@ -50,13 +58,13 @@ bool j1Map::Awake(pugi::xml_node& config)
 	Collider* mapcollider40 = App->collision->AddCollider({ 1456,224,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider41 = App->collision->AddCollider({ 1392,240,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider42 = App->collision->AddCollider({ 1328,256,16,16 }, COLLIDER_LEDGE, this);
-	Collider* mapcollider43 = App->collision->AddCollider({ 1264,272,16,16 }, COLLIDER_LEDGE, this); 
+	Collider* mapcollider43 = App->collision->AddCollider({ 1264,272,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider44 = App->collision->AddCollider({ 1184,272,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider45 = App->collision->AddCollider({ 1136,320,16,16 }, COLLIDER_LEDGE, this);
 	Collider* mapcollider46 = App->collision->AddCollider({ 1088,368,16,16 }, COLLIDER_LEDGE, this);
 
-	Collider* mapcollider = App->collision->AddCollider({ 0,0,1600,32}, COLLIDER_FLOOR, this);
-	Collider* mapcollider1 = App->collision->AddCollider({0,292,192,192},COLLIDER_FLOOR,this);
+	Collider* mapcollider = App->collision->AddCollider({ 0,0,1600,32 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider1 = App->collision->AddCollider({ 0,292,192,192 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider2 = App->collision->AddCollider({ 192,292,16,192 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider5 = App->collision->AddCollider({ 256,240,112,240 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider7 = App->collision->AddCollider({ 288,208,80,32 }, COLLIDER_FLOOR, this);
@@ -77,9 +85,9 @@ bool j1Map::Awake(pugi::xml_node& config)
 	Collider* mapcollider47 = App->collision->AddCollider({ 1184,272,96,208 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider48 = App->collision->AddCollider({ 1136,320,48,160 }, COLLIDER_FLOOR, this);
 	Collider* mapcollider49 = App->collision->AddCollider({ 1088,368,48,112 }, COLLIDER_FLOOR, this);
-	Collider* mapcollider50= App->collision->AddCollider({ 1600,0,5,500 }, COLLIDER_FLOOR, this);
-	Collider* mapcollider51 = App->collision->AddCollider({ 0,0,5,500 }, COLLIDER_FLOOR, this);
-
+	Collider* mapcollider50 = App->collision->AddCollider({ 0,500,3000,300 }, COLLIDER_DIE, this);
+	Collider* mapcollider51 = App->collision->AddCollider({ -20,0,23,1000 }, COLLIDER_FLOOR, this);
+	Collider* mapcollider52 = App->collision->AddCollider({ 1600,0,23,1000 }, COLLIDER_FLOOR, this);
 	return ret;
 }
 
@@ -88,7 +96,7 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	// TODO 5: Prepare the loop to draw all tilesets + Blit
+	
 	p2List_item<TileSet*>* draw_tilesets = data.tilesets.start;
 	p2List_item<MapLayer*>* draw_layers = data.layers.start;
 
@@ -106,7 +114,7 @@ void j1Map::Draw()
 						SDL_Rect rect = draw_tilesets->data->GetTileRect(draw_layers->data->GetGid(i, j));
 						SDL_Rect* section = &rect;
 
-						//iPoint world = MapToWorld(i, j);
+						
 
 						App->render->Blit(draw_tilesets->data->texture, pos.x, pos.y, &rect);
 					}
@@ -116,7 +124,7 @@ void j1Map::Draw()
 		}
 		draw_tilesets = draw_tilesets->next;
 	}
-		// TODO 9: Complete the draw function
+		
 
 }
 
@@ -168,7 +176,7 @@ bool j1Map::CleanUp()
 	}
 	data.tilesets.clear();
 
-	// TODO 2: clean up all layer data
+	
 	// Remove all layers
 	p2List_item<MapLayer*>* item1;
 	item1 = data.layers.start;
@@ -225,7 +233,7 @@ bool j1Map::Load(const char* file_name)
 		data.tilesets.add(set);
 	}
 
-	// TODO 4: Iterate all layers and load each of them
+	
 	// Load layer info ----------------------------------------------
 	pugi::xml_node layer;
 	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
@@ -257,8 +265,7 @@ bool j1Map::Load(const char* file_name)
 			item = item->next;
 		}
 
-		// TODO 4: Add info here about your loaded layers
-		// Adapt this vcode with your own variables
+		
 		
 		p2List_item<MapLayer*>* item_layer = data.layers.start;
 		while(item_layer != NULL)
@@ -403,7 +410,6 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-// TODO 3: Create the definition for a function that loads a single layer
 bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
@@ -428,36 +434,3 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 
 
 
-
-
-/*
-TODO 9 delete when not needed anymore
-
-p2List_item<MapLayer*>* fakeLayer = data.layers.start;
-p2List_item<TileSet*>* fakeTileset = data.tilesets.start;
-
-while (fakeTileset != NULL)
-{
-while (fakeLayer != NULL)
-{
-for (uint x = 0; x < fakeLayer->data->width; x++)
-{
-for (uint y = 0; y < fakeLayer->data->height; y++)
-{
-int ID = fakeLayer->data->GetGid(x, y);
-iPoint position = MapToWorld(x, y);
-SDL_Rect rect = fakeTileset->data->GetTileRect(ID);
-
-
-App->render->Blit(fakeTileset->data->texture, position.x, position.y, &rect);
-
-
-
-}
-}
-fakeLayer = fakeLayer->next;
-}
-fakeTileset = fakeTileset->next;
-}
-
-*/

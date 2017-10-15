@@ -1,5 +1,13 @@
-﻿  j1Map.cpp
-c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(98): warning C4018: '<': no coinciden signed/unsigned
-c:\users\adria\onedrive\documentos\github\game-development-p1\dev_class5_handout\motor2d\j1map.cpp(99): warning C4018: '<': no coinciden signed/unsigned
-  Motor2D.vcxproj -> C:\Users\adria\OneDrive\Documentos\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.exe
-  Motor2D.vcxproj -> C:\Users\adria\OneDrive\Documentos\GitHub\Game-Development-P1\Dev_class5_handout\Debug\Motor 2D.pdb (Partial PDB)
+﻿  j1Player.cpp
+c:\users\ricardo\desktop\devjuego\githubhandout\dev_class5_handout\motor2d\j1player.cpp(274): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ricardo\desktop\devjuego\githubhandout\dev_class5_handout\motor2d\j1player.cpp(369): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ricardo\desktop\devjuego\githubhandout\dev_class5_handout\motor2d\j1player.cpp(387): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ricardo\desktop\devjuego\githubhandout\dev_class5_handout\motor2d\j1player.cpp(388): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  j1Map.cpp
+c:\users\ricardo\desktop\devjuego\githubhandout\dev_class5_handout\motor2d\j1map.cpp(107): warning C4018: '<': signed/unsigned mismatch
+c:\users\ricardo\desktop\devjuego\githubhandout\dev_class5_handout\motor2d\j1map.cpp(108): warning C4018: '<': signed/unsigned mismatch
+  j1Collision.cpp
+  j1App.cpp
+  Generating Code...
+  Motor2D.vcxproj -> C:\Users\Ricardo\Desktop\DEVJUEGO\githubhandout\Dev_class5_handout\Debug\Motor 2D.exe
+  Motor2D.vcxproj -> C:\Users\Ricardo\Desktop\DEVJUEGO\githubhandout\Dev_class5_handout\Debug\Motor 2D.pdb (Full PDB)
