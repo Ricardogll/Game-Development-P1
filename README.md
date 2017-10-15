@@ -16,7 +16,7 @@ Download the zip file and extract it. Open the folder and execute the .exe.
 
 ## Controls
 
-Game:     
+Game controls:     
 
           A and D for moving left and right.
 
